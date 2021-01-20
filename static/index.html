@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="main.css" />
+    <title>Chat</title>
+  </head>
+  <body>
+    <header>
+      <p id="title" class="title">Welcome to chat</p>
+      <p id="status" class="none">offline</p>
+      <form id="nameForm">
+        <!-- <label>&#10571;</label> -->
+        <input
+          id="name"
+          type="text"
+          class="input"
+          placeholder="Enter your name"
+          autocomplete="off"
+        />
+      </form>
+    </header>
+
+    <main>
+      <p class="title">Notifications</p>
+      <ul id="notifications" class="list"></ul>
+
+      <form id="messageForm" class="none">
+        <input
+          id="message"
+          type="text"
+          class="input"
+          placeholder="Enter your message"
+          autocomplete="off"
+        />
+      </form>
+    </main>
+
+    <script src="main.js"></script>
+  </body>
+</html>

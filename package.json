@@ -1,0 +1,31 @@
+{
+  "name": "chat-backend",
+  "version": "0.0.1",
+  "description": "education",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victorbtgn/chat-backend.git"
+  },
+  "author": "Viktor Batyhin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/victorbtgn/chat-backend/issues"
+  },
+  "homepage": "https://github.com/victorbtgn/chat-backend#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "mongoose": "^5.11.11",
+    "ws": "^7.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
