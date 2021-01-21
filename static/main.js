@@ -1,4 +1,5 @@
-let connectionWSUrl = window.location.origin.replace(/https|http/, 'wss');
+let connectionWSUrl = window.location.origin.replace(/https|http/, 'wss'); // for heroku.com
+// let connectionWSUrl = window.location.origin.replace(/https|http/, 'ws'); // for dev
 
 const socket = new WebSocket(connectionWSUrl);
 
@@ -14,8 +15,13 @@ nameFormRef.addEventListener('submit', nameInputListener);
 messageFormRef.addEventListener('submit', messageInputListener);
 
 socket.onmessage = data => {
-    const response = JSON.parse(data.data);
-    renderMessage(response);
+    const res = JSON.parse(data.data);
+    if(res.type === 'store') {
+        res.message.forEach(msg => {
+            renderMessage(msg);
+        });
+    }
+    if(res.type === 'msg') { renderMessage(res.message) };
 }
 
 socket.onopen = () => {
@@ -29,7 +35,8 @@ socket.onclose = () => {
 function nameInputListener (evt) {
     evt.preventDefault();
     fetch(
-        'http://localhost:3000/registration/',
+        'https://chat-ws-test.herokuapp.com/registration',
+        // 'http://localhost:3000/registration',
         {
             method: 'POST',
             mode: 'cors',
@@ -38,19 +45,23 @@ function nameInputListener (evt) {
             },
             body: JSON.stringify({ name: nameInputRef.value}),
         }
-    ).then(data => {
-        console.log('DATA: ', data);
-    });
+    )
+    .then(res => res.json())
+    .then(data => {
+        titleRef.textContent += ` ${data.name}`;
 
-    titleRef.textContent += ` ${nameInputRef.value}`;
+        statusRef.classList.toggle('none');
+        statusRef.classList.toggle('status');
 
-    statusRef.classList.toggle('none');
-    statusRef.classList.toggle('status');
+        nameFormRef.classList.add('none');
+        messageFormRef.classList.remove('none');
 
-    nameFormRef.classList.add('none');
-    messageFormRef.classList.remove('none');
+        notificationsRef.classList.toggle('none');
+        notificationsRef.classList.add('list');
 
-    nameFormRef.removeEventListener('submit', nameInputListener);
+        nameFormRef.removeEventListener('submit', nameInputListener);
+    })
+    .catch(err => console.log(err));
 };
 
 function messageInputListener(evt) {
@@ -77,4 +88,13 @@ function renderMessage({ name, message }) {
 
     li.append(nameElement, messageElement);
     notificationsRef.appendChild(li);
+
+    scrollToBottom()
 }
+
+function scrollToBottom() {
+    window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth',
+      });
+};

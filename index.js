@@ -25,17 +25,28 @@ const runServer = async () => {
         app.use('/', express.static(path.resolve(__dirname, 'static')));
         app.post('/registration', registerUserController)
 
+        const messageStore = [];
         
         const socketServer = new WebSocket.Server({ server });
         socketServer.on('connection', ws => {
             ws.on('message', message => {
+                messageStore.push(JSON.parse(message));
                 socketServer.clients.forEach(client => {
                     if(client.readyState === WebSocket.OPEN) {
-                        client.send(message);
+                        const messageRes = {
+                            type: 'msg',
+                            message: JSON.parse(message)
+                        };
+                        client.send(JSON.stringify(messageRes));
                     };
                 });
             });
+            const firstRes = {
+                type: 'store',
+                message: messageStore
+            }
             ws.send(JSON.stringify({ name: 'Chatbot', message: 'Welcome to chat) Let\'s get acquainted, enter your name.' }));
+            ws.send(JSON.stringify(firstRes));
         });
 
         server.listen(PORT, () => console.log(`start listening on port: ${PORT}`));
